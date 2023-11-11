@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GWF version="2.0">
+    <staticSector>
+        <node type="node/const/perm/general" idtf="3" shapeColor="193" id="2212351683728" parent="0" left="0" top="0" right="15" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman" font_size="10" x="128.543" y="350.873" haveBus="false" idtf_pos="5">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/general" idtf="1" shapeColor="193" id="2212351682272" parent="0" left="0" top="0" right="15" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman" font_size="10" x="81.5" y="291.492" haveBus="false" idtf_pos="2">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/general" idtf="2" shapeColor="193" id="2212351686016" parent="0" left="0" top="0" right="15" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman" font_size="10" x="128.346" y="291.571" haveBus="false" idtf_pos="3">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <pair type="pair/const/-/perm/noorien" idtf="" shapeColor="0" id="2214004991696" parent="0" id_b="2212351682272" id_e="2212351686016" b_x="81.5" b_y="291.492" e_x="128.346" e_y="291.571" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/-/perm/noorien" idtf="" shapeColor="0" id="2214004979456" parent="0" id_b="2212351683728" id_e="2212351686016" b_x="128.543" b_y="350.873" e_x="128.346" e_y="291.571" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/-/perm/noorien" idtf="" shapeColor="0" id="2214004989296" parent="0" id_b="2212351683728" id_e="2212351686016" b_x="128.543" b_y="350.873" e_x="128.346" e_y="291.571" dotBBalance="0" dotEBalance="0">
+            <points>
+                <point x="138.527" y="322.243"/>
+            </points>
+        </pair>
+    </staticSector>
+</GWF>

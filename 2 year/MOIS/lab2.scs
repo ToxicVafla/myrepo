@@ -1,0 +1,170 @@
+section_subject_domain_of_stationery
+
+    => nrel_main_idtf:
+    [Раздел. Предметная область канцелярских товаров]
+    (* <- lang_ru;;*);
+    [Section. Subject domain of stationery]
+    (* <- lang_en;;*);
+
+    <= nrel_section_decomposition:...
+    (*
+        <- sc_node_tuple;;
+        <- section_subject_domain_of_writing_instruments
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область письменных принадлежностей] (* <- lang_ru;;*);;
+            *);;
+        
+        <- section_subject_domain_of_paper_products
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область бумажных изделий] (* <- lang_ru;;*);;
+            *);;
+
+        <- section_subject_domain_of_paper_clips 
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцелярских скрепок] (* <- lang_ru;;*);;
+            *);;
+        <- section_subject_domain_of_office_scissors_and_cutters 
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцелярских ножниц и резаков] (* <- lang_ru;;*);;
+            *);;
+        <- section_subject_domain_of_stationery_glue_and_tape 
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцелярских клеев и лент] (* <- lang_ru;;*);;
+            *);;
+        <- section_subject_domain_of_office_supplies_storage
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцелярских принадлежностей для хранения] (* <- lang_ru;;*);;
+            *);;
+        <- section_subject_domain_of_stationery_for_decoration
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцелярских принадлежностей для оформления] (* <- lang_ru;;*);;
+            *);;
+        <- section_subject_domain_of_measuring_accessories
+            (* 
+                <- sc_node_struct;;
+                => nrel_main_idtf: [Раздел. Предметная область канцлеярских принадлежностей для измерения] (* <- lang_ru;;*);;
+            *);;    
+    *);
+
+    -> rrel_key_sc_element:
+        concept_stationery (* => nrel_main_idtf: [Канцелярский товар] (* <- lang_ru;;*);;*);
+        concept_pen (* => nrel_main_idtf: [Ручка] (* <- lang_ru;;*);;*);
+        concept_pencil (* => nrel_main_idtf: [Карандаш] (* <- lang_ru;;*);;*);
+        concept_marker (* => nrel_main_idtf: [Маркер] (* <- lang_ru;;*);;*);
+        concept_brush (* => nrel_main_idtf: [Кисть] (* <- lang_ru;;*);;*);
+        concept_peper (* => nrel_main_idtf: [Бумага] (* <- lang_ru;;*);;*);
+        concept_notebook (* => nrel_main_idtf: [Блокнот] (* <- lang_ru;;*);;*);            
+        concept_paper_clip (* => nrel_main_idtf: [Скрепки] (* <- lang_ru;;*);;*);
+        concept_clip (* => nrel_main_idtf: [Зажим] (* <- lang_ru;;*);;*);
+        concept_staple (* => nrel_main_idtf: [Скоба] (* <- lang_ru;;*);;*);
+        concept_pushpin (* => nrel_main_idtf: [Кнопка] (* <- lang_ru;;*);;*);
+        concept_scissors (* => nrel_main_idtf: [Ножницы] (* <- lang_ru;;*);;*);
+        concept_cutter (* => nrel_main_idtf: [Резак] (* <- lang_ru;;*);;*);
+        concept_glue (* => nrel_main_idtf: [Клей] (* <- lang_ru;;*);;*);
+        concept_tape (* => nrel_main_idtf: [Скотч] (* <- lang_ru;;*);;*);
+        concept_folder (* => nrel_main_idtf: [Папка] (* <- lang_ru;;*);;*);
+        concept_penbox (* => nrel_main_idtf: [Пенал] (* <- lang_ru;;*);;*);
+        concept_backpack (* => nrel_main_idtf: [Рюкзак] (* <- lang_ru;;*);;*);
+        concept_sticker (* => nrel_main_idtf: [Наклейка] (* <- lang_ru;;*);;*);
+        concept_ruler (* => nrel_main_idtf: [Линейка] (* <- lang_ru;;*);;*);
+        nrel_belong (* => nrel_main_idtf: [Принадлежит] (* <- lang_ru;;*);;*);
+        nrel_value (* => nrel_main_idtf: [Стоимость] (* <- lang_ru;;*);;*);
+            
+    <- non_atomic_section;;
+
+section_subject_domain_of_stationery
+    = [*
+        subject_domain_of_stationery
+
+            => nrel_main_idtf:
+            [Предметная область канцелярских товаров](* <- lang_ru;;*);
+            [Subject domain of stationery](* <- lang_en;;*);
+
+            <- subject_domain;
+            <- sc_node_struct;
+
+            => nrel_private_subject_domain:
+                section_subject_domain_of_writing_instruments
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область письменных принадлежностей] (* <- lang_ru;;*);;
+                    *);
+                section_subject_domain_of_paper_products
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область бумажных изделий] (* <- lang_ru;;*);;
+                    *);
+                section_subject_domain_of_paper_clips 
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцелярских скрепок] (* <- lang_ru;;*);;
+                    *);
+                section_subject_domain_of_office_scissors_and_cutters 
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцелярских ножниц и резаков] (* <- lang_ru;;*);;
+                    *);
+                section_subject_domain_of_stationery_glue_and_tape 
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцелярских клеев и лент] (* <- lang_ru;;*);;
+                    *);
+                section_subject_domain_of_office_supplies_storage
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцелярских принадлежностей для хранения] (* <- lang_ru;;*);;
+                    *);
+                subject_domain_of_stationery_for_decoration
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцелярских принадлежностей для оформления] (* <- lang_ru;;*);;
+                    *);
+                subject_domain_of_measuring_accessories
+                    (* 
+                        <- sc_node_struct;;
+                        => nrel_main_idtf: [Предметная область канцлеярских принадлежностей для измерения] (* <- lang_ru;;*);;
+                    *);  
+                subject_domain_of_musical_tracks
+                    (* 
+                        <-sc_node_struct;; 
+                        => nrel_main_idtf: [Предметная область музыкальных треков] (* <- lang_ru;;*);;
+                    *);
+
+            <= nrel_private_subject_domain:
+                subject_domain_of_stationery;
+
+            -> rrel_maximum_studied_object_class:
+                concept_sationery;
+                
+            -> rrel_not_maximum_studied_object_class:
+                concept_pen;
+                concept_pencil;
+                concept_marker;
+                concept_brush;
+                concept_peper; 
+                concept_notebook;             
+                concept_paper_clip;
+                concept_clip; 
+                concept_staple; 
+                concept_pushpin; 
+                concept_scissors;
+                concept_cutter;
+                concept_glue;
+                concept_tape;
+                concept_folder;
+                concept_penbox;
+                concept_backpack;
+                concept_sticker;
+                concept_ruler;
+
+            -> rrel_explored_relation:
+                nrel_belong;
+                rel_value;;  
+	*];;

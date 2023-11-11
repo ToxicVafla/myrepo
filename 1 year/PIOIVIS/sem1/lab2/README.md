@@ -1,0 +1,21 @@
+<h1>Лабораторная работа2</h1>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/1.png >
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/2.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/3.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/4.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/5.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/6.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/7.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/8.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/9.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/10.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/11.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/12.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/13.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/14.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/15.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/16.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/17.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/18.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/19.png>
+<img src = https://github.com/iit-22170x/RPIIS/blob/%D0%91%D0%B0%D0%B3%D0%B4%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B2_%D0%98_%D0%A1/sem1/lab2/photo/20.png>

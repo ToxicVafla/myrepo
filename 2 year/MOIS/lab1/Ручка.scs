@@ -1,0 +1,89 @@
+concept_pen
+    <- sc_node_class;
+    <- concept_stationery
+        (* <- sc_node_class;; *);
+    => nrel_main_identifier:
+        [ручка]
+        (* <- lang_ru;; *);
+        [pen]
+        (* <- lang_en;; *);
+    => nrel_date_of_invention: ...
+        (*
+            <- concept_date
+                (* <- sc_node_class;; *);;
+            => nrel_value: ...
+                (*
+                    <- sc_node_tuple;;
+                    -> rrel_year: 1888
+                        (*
+                            <- concept_number
+                                (* <- sc_node_class;; *);;
+                        *);;
+                    -> rrel_july: 30
+                        (*
+                            <- concept_number
+                                (* <- sc_node_class;; *);;
+                        *);;
+                *);;
+        *);
+    => nrel_inventor: John_Loud
+        (* 
+            <- concept_human
+                (* <- sc_node_class;; *);;
+        *);
+    <= nrel_sc_text_translation: ...
+        (*
+            <- concept_definition
+                (* <- sc_node_class;; *);;
+            -> [ручка - письменная принадлежность, с помощью которой можно оставить чернильный след на поверхности]
+                (* <- lang_ru;; *);;
+        *);
+    => nrel_types: ...
+        (*
+            <- sc_node_tuple;;
+            -> concept_ball_pen
+                (* <- sc_node_class;; *);;
+            -> concept_capillary_pen
+                (* <- sc_node_class;; *);;
+            -> concept_fountain_pen
+                (* <- sc_node_class;; *);;
+            -> concept_gel_pen
+                (* <- sc_node_class;; *);;
+        *);
+    => nrel_components: ...
+        (*
+            <- sc_node_tuple;;
+            -> concept_case
+                (* <- sc_node_class;; *);;
+            -> concept_ink_refill
+                (*
+                    <- sc_node_class;;
+                    => nrel_components  : ...
+                        (*
+                            <- sc_node_tuple;;
+                            -> concept_ink
+                                (* <- sc_node_class;; *);;                           
+                            -> concept_ferrule
+                                (* <- sc_node_class;; *);;
+                            -> concept_plastic_case
+                                (* <- sc_node_class;; *);;
+                            -> concept_ball
+                                (*
+                                    <- sc_node_class;;
+                                    <= nrel_writing_thickness: ...
+                                        (*
+                                            <- concept_quantity
+                                                (* <- sc_node_class;; *);;
+                                            => nrel_value: ...
+                                                (*
+                                                    <- sc_node_tuple;;  
+                                                    -> rrel_mm: ...
+                                                        (* <- concept_number
+                                                            (* <- sc_node_class;; *);;
+                                                        *);;
+                                                *);;
+                                        *);;
+                                *);;
+                        *);;
+                *);;
+        *);;

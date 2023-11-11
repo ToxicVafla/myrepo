@@ -1,0 +1,396 @@
+vasil@DESKTOP-P7NLMCO MINGW64 ~
+$ cd desktop
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop
+$ mkdir localrep
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop
+$ cd localrep
+
+1)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep
+$ git init
+Initialized empty Git repository in C:/Users/vasil/Desktop/localrep/.git/
+
+2)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git status
+On branch master
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+
+4)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ touch 1.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add 1.txt
+
+5)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git commit -m "comment for commit"
+[master (root-commit) f482f1c] comment for commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 1.txt
+
+6)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ touch 2.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ touch 3.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add .
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git commit -m "comment for all files commit"
+[master 629ddfb] comment for all files commit
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 2.txt
+ create mode 100644 3.txt
+
+7)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git log
+commit 629ddfb9e7684501a8f6be1501abbf894690156c (HEAD -> master)
+Author: Василий Крюк <ToxicVafla>
+Date:   Thu Dec 1 10:13:38 2022 +0300
+
+    comment for all files commit
+
+commit f482f1c53a1fa88a4c6d5107ade730cc3a480610
+Author: Василий Крюк <ToxicVafla>
+Date:   Thu Dec 1 10:08:44 2022 +0300
+
+    comment for commit
+
+8)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git config --list
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=openssl
+http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+core.autocrlf=true
+core.fscache=true
+core.symlinks=false
+pull.rebase=false
+credential.helper=manager-core
+credential.https://dev.azure.com.usehttppath=true
+init.defaultbranch=master
+user.email=ToxicVafla
+core.repositoryformatversion=0
+core.filemode=false
+core.bare=false
+core.logallrefupdates=true
+core.symlinks=false
+core.ignorecase=true
+
+9)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ touch 4.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add 4.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git restore --staged 4.txt
+
+10)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ echo smth > 1.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git diff 1.txt
+warning: in the working copy of '1.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git a/1.txt b/1.txt
+index e69de29..4b84286 100644
+--- a/1.txt
++++ b/1.txt
+@@ -0,0 +1 @@
++smth
+
+11)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git restore 1.txt
+
+12)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ gitk
+
+13)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add .
+
+14-15)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git config --local user.name VAFLA
+
+16)
+$ git branch
+* master
+
+17)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git branch tango
+
+18)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git checkout tango
+Switched to branch 'tango'
+A       4.txt
+
+19)
+$ git checkout -b mango
+Switched to a new branch 'mango'
+
+20)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (mango)
+$ git checkout tango
+Switched to branch 'tango'
+A       4.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (tango)
+$ git branch -d mango
+Deleted branch mango (was 629ddfb).
+
+21)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (tango)
+$ gitk
+
+22)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (tango)
+$ git status
+On branch tango
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   4.txt
+
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (tango)
+$ git commit -m "for merge"
+[tango 86901ef] for merge
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 4.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (tango)
+$ git checkout master
+Switched to branch 'master'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git merge tango
+Updating 629ddfb..86901ef
+Fast-forward
+ 4.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 4.txt
+
+23)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git branch bracer
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ echo hello > 1.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add 1.txt
+warning: in the working copy of '1.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git commit -m "master 1.txt"
+[master 40f9346] master 1.txt
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git checkout bracer
+Switched to branch 'bracer'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (bracer)
+$ echo world > 1.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (bracer)
+$ git add 1.txt
+warning: in the working copy of '1.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (bracer)
+$ git commit -m "bracer 1.txt"
+[bracer 2d1d5cf] bracer 1.txt
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (bracer)
+$ git checkout master
+Switched to branch 'master'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git merge bracer
+Auto-merging 1.txt
+CONFLICT (content): Merge conflict in 1.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+24)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master|MERGING)
+$ git status
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   1.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+25)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master|MERGING)
+$ echo hello world > 1.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master|MERGING)
+$ git add 1.txt
+warning: in the working copy of '1.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master|MERGING)
+$ git commit -m "solution of conflict with merge"
+[master 7c74223] solution of conflict with merge
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$
+
+26)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git log
+commit f2b69c51442617ba97b81361811a9ff2c3ab5191 (HEAD -> master)
+Author: VAFLA <ToxicVafla>
+Date:   Thu Dec 1 11:28:00 2022 +0300
+
+    5.txt
+
+commit 7c74223db79866cb9bbbcef40c6650c77f670db4
+Merge: 40f9346 2d1d5cf
+Author: VAFLA <ToxicVafla>
+Date:   Thu Dec 1 11:23:10 2022 +0300
+
+    solution of conflict with merge
+
+commit 40f9346f7d9eeade4b335126da675628401ceaae
+Author: VAFLA <ToxicVafla>
+Date:   Thu Dec 1 11:11:05 2022 +0300
+
+    master 1.txt
+
+commit 2d1d5cf0e0cf655b3065cbb336438150791499c4
+Author: VAFLA <ToxicVafla>
+Date:   Thu Dec 1 11:08:46 2022 +0300
+
+    bracer 1.txt
+
+commit 1656a7172a9db97a4cb93935499ddb292b3bac74
+Author: VAFLA <ToxicVafla>
+Date:   Thu Dec 1 11:03:36 2022 +0300
+
+    1.txt comm
+
+commit 86901efbba53f9da908406504b3ca240cf9d27d0
+Author: VAFLA <ToxicVafla>
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git checkout 7c74223
+Note: switching to '7c74223'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 7c74223 solution of conflict with merge
+
+27)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ echo hello > 6.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git add .
+warning: in the working copy of '6.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git commit -m "6.txt comm"
+[master d3319a7] 6.txt comm
+ 1 file changed, 1 insertion(+)
+ create mode 100644 6.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git checkout nulik
+Switched to branch 'nulik'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik)
+$ echo world > 6.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik)
+$ git add .
+warning: in the working copy of '6.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik)
+$ git commit -m "6.txt nulik"
+[nulik 6dad16e] 6.txt nulik
+ 1 file changed, 1 insertion(+)
+ create mode 100644 6.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik)
+$ git checkout master
+Switched to branch 'master'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (master)
+$ git checkout nulik
+Switched to branch 'nulik'
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik)
+$ git rebase master
+Auto-merging 6.txt
+CONFLICT (add/add): Merge conflict in 6.txt
+error: could not apply 6dad16e... 6.txt nulik
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 6dad16e... 6.txt nulik
+
+28)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ echo hello world > 6.txt
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ git add .
+warning: in the working copy of '6.txt', LF will be replaced by CRLF the next time Git touches it
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ git commit -m "rebase conflict"
+[detached HEAD 180d845] rebase conflict
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ git rebase --continue
+Successfully rebased and updated refs/heads/nulik.
+
+29)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ git rebase --abort
+
+30)
+vasil@DESKTOP-P7NLMCO MINGW64 ~/desktop/localrep (nulik|REBASE 1/1)
+$ git rebase --skip
