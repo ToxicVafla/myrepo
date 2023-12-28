@@ -1,131 +1,168 @@
 #include "pch.h"
-#include "SportClub.h"
+#include "..\test_try11\vectors.cpp" 
 
-
-TEST(SportClubConstructor, SportClubNames) {
-	SportClub sportClub;
-	EXPECT_TRUE(sportClub.getName() == "PSG");
-	EXPECT_TRUE(sportClub.getLocation() == "Paris, FRANCE");
-
+TEST(tests, constructTEST) {
+	Vector f(1, 1, 1, 3, 3, 3);
+	Points res = f.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 2);
+	EXPECT_EQ(res._y, 2);
+	EXPECT_EQ(res._z, 2);
 }
 
-TEST(SportClubConstructor, SportClubMembers) {
-	SportClub sportClub;
-	vector <ClubMember> members = { TeamMember(), TeamMember(Basketball,"2 years", 24, "Herbert", "Female"),
-								   Fan(), Fan(Soccer, "3 years", 22,"Virginia", "Female"),
-									Coach(), Coach(Volleyball, 46, "Martha", "Female") };
-	vector <ClubMember> clubMembers = sportClub.getClubMembers();
-	EXPECT_EQ(members.size(), clubMembers.size());
-	for (int i = 0; i < clubMembers.size(); i++)
-	{
-		EXPECT_EQ(members[i].getName(), clubMembers[i].getName());
-	}
+TEST(tests, getCords2ndTEST) {
+	Vector f(1, 1, 1);
+	Points res = f.CordsSecond(2, 3, 4);
+	EXPECT_EQ(res._x, 3);
+	EXPECT_EQ(res._y, 4);
+	EXPECT_EQ(res._z, 5);
 }
 
-TEST(SportClubConstructor, SportClubTeams) {
-	SportClub sportClub;
-	vector <Team> teams = { Team(), Team(Basketball, "TsmokiMinsk"), Team(Volleyball, "Olypmiacos") };
-	vector <Team> sportClubTeams = sportClub.getTeams();
-	EXPECT_EQ(teams.size(), sportClubTeams.size());
-	for (int i = 0; i < sportClubTeams.size(); i++)
-	{
-		EXPECT_EQ(teams[i].getName(), sportClubTeams[i].getName());
-	}
+TEST(tests, getCords1stTEST) {
+	Vector f(2, 2, 2);
+	Points res = f.CordsFirst(1, 1, 3);
+	EXPECT_EQ(res._x, -1);
+	EXPECT_EQ(res._y, -1);
+	EXPECT_EQ(res._z, 1);
 }
 
-TEST(SportClubConstructor, SportClubAdmins) {
-	SportClub sportClub;
-	vector <Admin> admins = { Manager("Brandon", "Bradndomdom") , Bookkeeper("Bob", "boby2005") };
-	vector <Admin> clubAdmins = sportClub.getAdmins();
-	EXPECT_EQ(admins.size(), clubAdmins.size());
-	for (int i = 0; i < clubAdmins.size(); i++)
-	{
-		EXPECT_EQ(admins[i].getName(), clubAdmins[i].getName());
-	}
+TEST(tests, lengthTEST) {
+	Vector f(3, 2, 7);
+	EXPECT_EQ(f.length(), 7.874);
 }
 
-TEST(SportClubFunctions, AddingNewAdmin) {
-	SportClub sportClub;
-	Bookkeeper newBookkeeper("Dylan", "91131413335");
-	sportClub.addNewAdmin(newBookkeeper);
-	vector <Admin> clubAdmins = sportClub.getAdmins();
-	bool exists = false;
-	for (int i = 0; i < clubAdmins.size(); i++)
-	{
-		if (clubAdmins[i] == newBookkeeper) exists = true;
-
-	}
-	EXPECT_TRUE(exists);
+TEST(tests, summCeqFplusGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(5, 1, 1);
+	Vector c = f + g;
+	Points res = c.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 6);
+	EXPECT_EQ(res._y, 3);
+	EXPECT_EQ(res._z, 4);
 }
 
-TEST(SportClubFunctions, AddingNewClubMember) {
-	SportClub sportClub;
-	Fan newFan(Volleyball, "2 year", 21, "Katerine", "Female");
-	sportClub.addNewClubMember(newFan);
-	vector <ClubMember> clubMembers = sportClub.getClubMembers();
-	bool exists = false;
-	for (int i = 0; i < clubMembers.size(); i++)
-	{
-		if (clubMembers[i] == newFan) exists = true;
-	}
-	EXPECT_TRUE(exists);
+TEST(tests, summFeqFplusGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(2, 2, 5);
+	f += g += g += g;		//at first it counts g += g, then g += g with new values, and then f += g (final g). Same works for "-=", "*=".
+	Points res = f.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 9);
+	EXPECT_EQ(res._y, 10);
+	EXPECT_EQ(res._z, 23);
 }
 
-TEST(SportClubFunctions, AddingNewTeam) {
-	SportClub sportClub;
-	Team newTeam(Basketball, "Boston Celtics");
-	sportClub.addNewTeam(newTeam);
-	vector <Team> sportClubTeams = sportClub.getTeams();
-	bool exists = false;
-	for (int i = 0; i < sportClubTeams.size(); i++)
-	{
-		if (sportClubTeams[i] == newTeam) exists = true;
-	}
-	EXPECT_TRUE(exists);
+
+TEST(tests, diffCeqFminusGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(5, 1, 1);
+	Vector c = f - g;
+	Points res = c.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, -4);
+	EXPECT_EQ(res._y, 1);
+	EXPECT_EQ(res._z, 2);
 }
 
-TEST(SportClubFunctions, removingClubMember) {
-	SportClub sportClub;
-	vector <ClubMember> clubMembers = sportClub.getClubMembers();
-	Fan removableFan(Soccer, "3 years", 22, "Virginia", "Female");
-	bool exists = false;
-	for (int i = 0; i < clubMembers.size(); i++)
-	{
-		if (clubMembers[i] == removableFan) exists = true;
-	}
-	EXPECT_TRUE(exists);
-
-	sportClub.removeClubMember(removableFan);
-	vector <ClubMember> NEWclubMembers = sportClub.getClubMembers();
-	for (int i = 0; i < NEWclubMembers.size(); i++)
-	{
-		EXPECT_FALSE(NEWclubMembers[i].getName() == "Virginia");
-	}
+TEST(tests, diffFeqFminusGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(2, 2, 5);
+	f -= g;
+	Points res = f.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, -1);
+	EXPECT_EQ(res._y, 0);
+	EXPECT_EQ(res._z, -2);
 }
 
-TEST(SportClubFunctions, removingTeam) {
-	SportClub sportClub;
-	vector <Team> teams = sportClub.getTeams();
-	Team removableTeam(Basketball, "TsmokiMinsk");
-	bool exists = false;
-	for (int i = 0; i < teams.size(); i++)
-	{
-		if (teams[i] == removableTeam) exists = true;
-	}
-	EXPECT_TRUE(exists);
-
-	sportClub.removeTeam(removableTeam);
-	vector <Team> NEWteams = sportClub.getTeams();
-	for (int i = 0; i < NEWteams.size(); i++)
-	{
-		EXPECT_FALSE(NEWteams[i].getName() == "Avangers");
-	}
+TEST(tests, prodCeqFxNumTEST) {
+	Vector f(1, 2, 3);
+	double number = 0.5;
+	Vector c = f * number;
+	Points res = c.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 0.5);
+	EXPECT_EQ(res._y, 1);
+	EXPECT_EQ(res._z, 1.5);
 }
 
-TEST(SportClubFunctions, checkingCertificate) {
-	SportClub sportClub;
-	vector <ClubMember>& members = sportClub.getClubMembers();
-	members[3].leftTheClub();
-	sportClub.checkForCertificate();
-	EXPECT_FALSE(members[3].getName() == "Amanda");
+TEST(tests, prodFeqFxNumTEST) {
+	Vector f(1, 2, 3);
+	double number = 2;
+	f *= number;
+	Points res = f.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 2);
+	EXPECT_EQ(res._y, 4);
+	EXPECT_EQ(res._z, 6);
+}
+
+TEST(tests, prodCeqFxGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(3, 1, 5);
+	Vector c = f * g;
+	Points res = c.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 7);
+	EXPECT_EQ(res._y, 4);
+	EXPECT_EQ(res._z, -5);
+}
+
+TEST(tests, prodFeqFxGTEST) {
+	Vector f(3, 2, 2);
+	Vector g(4, 1, 3);
+	f *= g;
+	Points res = f.CordsSecond(0, 0, 0);
+	EXPECT_EQ(res._x, 4);
+	EXPECT_EQ(res._y, -1);
+	EXPECT_EQ(res._z, -5);
+}
+
+TEST(tests, divisionNumCeqFdivideGTEST) {
+	Vector f(3, 4, 5);
+	Vector g(2, 2, 1);
+	double c = f / g;
+	EXPECT_EQ(c, 2.357);
+}
+
+TEST(tests, angleNumCeqFinGTEST) {
+	Vector f(1, 2, 3);
+	Vector g(4, 4, 4);
+	double c = f ^ g;
+	EXPECT_EQ(c, 0.9258);
+}
+
+TEST(tests, boolGT_TEST) {
+	Vector f(11, 22, 33);
+	Vector g(1, 2, 3);
+	bool c = f > g;
+	EXPECT_EQ(c, true);
+}
+
+TEST(tests, boolGE1_TEST) {
+	Vector f(11, 22, 33);
+	Vector g(1, 2, 3);
+	bool c = f >= g;
+	EXPECT_EQ(c, true);
+}
+
+TEST(tests, boolGE2_TEST) {
+	Vector f(1, 2, 3);
+	Vector g(1, 2, 3);
+	bool c = f >= g;
+	EXPECT_EQ(c, true);
+}
+
+TEST(tests, boolLT_TEST) {
+	Vector f(1, 2, 3);
+	Vector g(11, 22, 33);
+	bool c = f < g;
+	EXPECT_EQ(c, true);
+}
+
+TEST(tests, boolLE1_TEST) {
+	Vector f(1, 2, 3);
+	Vector g(11, 22, 33);
+	bool c = f <= g;
+	EXPECT_EQ(c, true);
+}
+
+TEST(tests, boolLE2_TEST) {
+	Vector f(1, 2, 3);
+	Vector g(1, 2, 3);
+	bool c = f <= g;
+	EXPECT_EQ(c, true);
 }
