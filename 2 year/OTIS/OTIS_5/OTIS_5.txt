@@ -1,0 +1,1099 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using static try1c_sharp_otis_5.Form1;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+namespace try1c_sharp_otis_5
+{
+    public partial class Form1 : Form
+    {
+        private bool isDragging = false;
+        private Point offset = Point.Empty;
+        private Node draggedNode = null;
+        private const int ArrowSize = 10; // Размер стрелки
+        private const int ArrowAngle = 30; // Угол стрелки
+
+        private enum EditMode
+        {
+            CreateNodesAndEdges,
+            RenameNodesAndEdges,
+            DeleteNodesAndEdges,
+            ChangeEdgeType,
+            ShortAndTraces,
+            None
+        }
+        public enum EdgeType
+        {
+            Undirected,
+            DirectedFromNode1ToNode2,
+            DirectedFromNode2ToNode1
+        }
+
+        private EditMode currentEditMode = EditMode.None;
+
+        public Form1()
+        {
+            InitializeComponent();
+
+
+        }
+
+
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ClearPannel_Click(object sender, EventArgs e)
+        {
+            nodes.Clear();
+            edges.Clear();
+            selectedNode1 = null;
+            selectedNode2 = null;
+            panel1.Invalidate();
+            MessageBox.Show("Очистка выполнена", "Status bar", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private Node selectedNode1 = null;
+        private Node selectedNode2 = null;
+        private Node chosenNode1 = null;
+        private Node chosenNode2 = null;
+        private Edge selectedEdge = null;
+
+        private List<Node> nodes = new List<Node>();
+        private List<Edge> edges = new List<Edge>();
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            Pen edgePen = new Pen(Color.Black, 2); // Увеличьте толщину линии до 4 (или другого значения по вашему выбору)
+            foreach (Edge edge in edges)
+            {
+                DrawArrow(g, edgePen, edge.Node1.Location, edge.Node2.Location, edge.Type);
+
+                // Отображаем имя ребра рядом с ним
+                Point midpoint = new Point((edge.Node1.Location.X + edge.Node2.Location.X) / 2,
+                                           (edge.Node1.Location.Y + edge.Node2.Location.Y) / 2);
+                g.DrawString(edge.Number.ToString(), Font, Brushes.Black, midpoint);
+            }
+
+            foreach (Node node in nodes)
+            {
+                Brush nodeBrush = (node == selectedNode1) ? Brushes.Blue : Brushes.Red;
+                g.FillEllipse(nodeBrush, node.Location.X - 10, node.Location.Y - 10, 20, 20);
+
+                // Отображаем имя вершины рядом с ней
+                g.DrawString(node.Name, Font, Brushes.Black, node.Location.X + 10, node.Location.Y + 10);
+            }
+        }
+
+        private void DrawArrow(Graphics g, Pen pen, Point from, Point to)
+        {
+            float angle = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+            float angle1 = angle + ArrowAngle * (float)(Math.PI / 180);
+            float angle2 = angle - ArrowAngle * (float)(Math.PI / 180);
+
+            float x1 = to.X - ArrowSize * (float)Math.Cos(angle1);
+            float y1 = to.Y - ArrowSize * (float)Math.Sin(angle1);
+
+            float x2 = to.X - ArrowSize * (float)Math.Cos(angle2);
+            float y2 = to.Y - ArrowSize * (float)Math.Sin(angle2);
+
+            g.DrawLine(pen, to.X, to.Y, x1, y1);
+            g.DrawLine(pen, to.X, to.Y, x2, y2);
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                draggedNode = GetClickedNode(e.Location);
+                if (draggedNode != null)
+                {
+                    isDragging = true;
+                    offset = new Point(e.Location.X - draggedNode.Location.X, e.Location.Y - draggedNode.Location.Y);
+                }
+            }
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging && draggedNode != null)
+            {
+                Point newLocation = new Point(e.Location.X - offset.X, e.Location.Y - offset.Y);
+
+
+                // Обновляем координаты перемещаемого узла
+                draggedNode.Location = newLocation;
+
+                // Обновляем координаты связанных рёбер
+                foreach (Edge edge in edges)
+                {
+                    if (edge.Node1 == draggedNode || edge.Node2 == draggedNode)
+                    {
+                        Debug.WriteLine($"Edge updated: {edge.Node1} - {edge.Node2}");
+                    }
+                }
+
+                // Выводим отладочную информацию о рёбрах
+                foreach (Edge edge in edges)
+                {
+                    Debug.WriteLine($"Edge: {edge.Node1} - {edge.Node2}");
+                }
+
+                panel1.Invalidate();
+            }
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragging = false;
+            draggedNode = null;
+        }
+
+        private void panel1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (currentEditMode == EditMode.ShortAndTraces)
+            {
+                
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (chosenNode1 == null)
+                    {
+                        chosenNode1 = GetClickedNode(e.Location);
+                        MessageBox.Show("Первый узел");
+                        panel1.Invalidate();
+                    }
+                    else
+                    {
+                        // Запросить пользователя ввести вес ребра
+
+                        chosenNode2 = GetClickedNode(e.Location);
+                        MessageBox.Show("Второй узел");
+                        if (chosenNode1 != null && chosenNode2 != null)
+                        {
+                            SmthToShow();
+
+
+                        }
+
+                        chosenNode1 = null;
+                        chosenNode2 = null;
+
+                        panel1.Invalidate();
+                    }
+                }
+            }
+            else if (currentEditMode == EditMode.RenameNodesAndEdges)
+            {
+                // Режим переименования включен
+                Node clickedNode = GetClickedNode(e.Location);
+                Edge clickedEdge = GetClickedEdge(e.Location);
+
+                if (clickedNode != null)
+                {
+                    // Переименовываем узел
+                    string newName = PromptForName("Введите новое имя для узла", clickedNode.Name);
+                    if (!string.IsNullOrEmpty(newName))
+                    {
+                        clickedNode.Name = newName;
+                        panel1.Invalidate();
+                    }
+                }
+                else if (clickedEdge != null)
+                {
+                    // Переименовываем ребро
+                    int newNumber;
+                    if (int.TryParse(PromptForName("Введите новый вес для ребра", clickedEdge.Number.ToString()), out newNumber))
+                    {
+                        clickedEdge.Number = newNumber;
+                        panel1.Invalidate();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Неверный формат числа(целое должно быть).");
+                    }
+                }
+            }
+            else if (currentEditMode == EditMode.DeleteNodesAndEdges)
+            {
+                // Режим удаления включен
+                Node clickedNode = GetClickedNode(e.Location);
+                Edge clickedEdge = GetClickedEdge(e.Location);
+
+                if (clickedNode != null)
+                {
+                    // Удаляем узел
+                    nodes.Remove(clickedNode);
+                    // Удаляем все рёбра, связанные с этим узлом
+                    edges.RemoveAll(edge => edge.Node1 == clickedNode || edge.Node2 == clickedNode);
+                    panel1.Invalidate();
+                }
+                else if (clickedEdge != null)
+                {
+                    // Удаляем ребро
+                    edges.Remove(clickedEdge);
+                    panel1.Invalidate();
+                }
+            }
+            else if (currentEditMode == EditMode.ChangeEdgeType && e.Button == MouseButtons.Left)
+            {
+                Edge clickedEdge = GetClickedEdge(e.Location);
+                if (clickedEdge != null)
+                {
+                    // Выбираем дугу для изменения типа
+                    selectedEdge = clickedEdge;
+                    MessageBox.Show($"Выбрано ребро для изменения типа. Текущий тип: {GetEdgeTypeString(selectedEdge.Type)}");
+                }
+            }
+            else
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (!isDragging)
+                    {
+                        // Запросить пользователя ввести имя узла
+                        string nodeName = ShowInputDialog("Enter node name", $"Node {nodes.Count + 1}");
+
+                        // Создать новый узел с указанным именем
+                        Node newNode = new Node(e.Location, nodeName);
+                        nodes.Add(newNode);
+                        panel1.Invalidate();
+                    }
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    if (selectedNode1 == null)
+                    {
+                        selectedNode1 = GetClickedNode(e.Location);
+                        panel1.Invalidate();
+                    }
+                    else
+                    {
+                        // Запросить пользователя ввести вес ребра
+
+                        selectedNode2 = GetClickedNode(e.Location);
+
+                        if (selectedNode1 != null && selectedNode2 != null)
+                        {
+                            int edgeNumber;
+                            if (int.TryParse(ShowInputDialog("Enter edge вес", (edges.Count + 1).ToString()), out edgeNumber))
+                            {
+                                // Создать новое ребро с указанным весом
+                                edges.Add(new Edge(selectedNode1, selectedNode2, edgeNumber));
+                            }
+                            else
+                            {
+                                MessageBox.Show("Неверный формат числа для номера ребра.");
+                            }
+                        }
+
+                        selectedNode1 = null;
+                        selectedNode2 = null;
+
+                        panel1.Invalidate();
+                    }
+                }
+            }
+        }
+
+        private string ShowInputDialog(string title, string defaultValue)
+        {
+            Form prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = title,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = title };
+            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400, Text = defaultValue };
+            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(textBox);
+            prompt.AcceptButton = confirmation;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : defaultValue;
+        }
+
+        private Node GetClickedNode(Point clickLocation)
+        {
+            foreach (Node node in nodes)
+            {
+                if (Math.Pow(node.Location.X - clickLocation.X, 2) + Math.Pow(node.Location.Y - clickLocation.Y, 2) <= Math.Pow(10, 2))
+                {
+                    return node;
+                }
+            }
+            return null;
+        }
+
+        private void enable_edit_Click(object sender, EventArgs e)
+        {
+            if (currentEditMode == EditMode.CreateNodesAndEdges)
+            {
+                // Если включен режим создания узлов и рёбер, отключаем его
+                currentEditMode = EditMode.None;
+                enable_edit.Text = "Edit on";
+                panel1.MouseClick -= panel1_MouseClick;
+                panel1.Paint -= panel1_Paint;
+                panel1.MouseDown -= panel1_MouseDown;
+                panel1.MouseMove -= panel1_MouseMove;
+                panel1.MouseUp -= panel1_MouseUp;
+            }
+            else
+            {
+                // Если режим выключен или включен режим переименования, включаем режим создания узлов и рёбер
+                currentEditMode = EditMode.CreateNodesAndEdges;
+                enable_edit.Text = "Edit off";
+                panel1.MouseClick += panel1_MouseClick;
+                panel1.Paint += panel1_Paint;
+                panel1.MouseDown += panel1_MouseDown;
+                panel1.MouseMove += panel1_MouseMove;
+                panel1.MouseUp += panel1_MouseUp;
+            }
+        }
+
+        private void disable_edit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void edit_identifier_Click(object sender, EventArgs e)
+        {
+            currentEditMode = (currentEditMode == EditMode.RenameNodesAndEdges) ? EditMode.None : EditMode.RenameNodesAndEdges;
+
+            if (currentEditMode == EditMode.RenameNodesAndEdges)
+            {
+                // Включаем режим переименования
+                MessageBox.Show("Режим переименования включен. Щелкните ЛКМ на узле или ребре для переименования.");
+            }
+            else
+            {
+                // Выключаем режим переименования
+                MessageBox.Show("Режим переименования выключен.");
+            }
+        }
+
+        private string PromptForName(string prompt, string currentName)
+        {
+            // Отображаем диалоговое окно для ввода нового имени
+            string newName = Microsoft.VisualBasic.Interaction.InputBox(prompt, "Введите новое имя", currentName);
+
+            return newName;
+        }
+
+        private Edge GetClickedEdge(Point clickLocation)
+        {
+            foreach (Edge edge in edges)
+            {
+                // Проверяем, находится ли клик вблизи ребра
+                float distance = PointToLineDistance(clickLocation, edge.Node1.Location, edge.Node2.Location);
+                if (distance <= 10) // Расстояние, при котором считаем, что клик произошел вблизи ребра
+                {
+                    return edge;
+                }
+            }
+            return null;
+        }
+
+        private float PointToLineDistance(Point point, Point lineStart, Point lineEnd)
+        {
+            float A = point.X - lineStart.X;
+            float B = point.Y - lineStart.Y;
+            float C = lineEnd.X - lineStart.X;
+            float D = lineEnd.Y - lineStart.Y;
+
+            float dot = A * C + B * D;
+            float len_sq = C * C + D * D;
+            float param = dot / len_sq;
+
+            float xx, yy;
+
+            if (param < 0)
+            {
+                xx = lineStart.X;
+                yy = lineStart.Y;
+            }
+            else if (param > 1)
+            {
+                xx = lineEnd.X;
+                yy = lineEnd.Y;
+            }
+            else
+            {
+                xx = lineStart.X + param * C;
+                yy = lineStart.Y + param * D;
+            }
+
+            float dx = point.X - xx;
+            float dy = point.Y - yy;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        private void delete_button_Click(object sender, EventArgs e)
+        {
+            currentEditMode = (currentEditMode == EditMode.DeleteNodesAndEdges) ? EditMode.None : EditMode.DeleteNodesAndEdges;
+
+            if (currentEditMode == EditMode.DeleteNodesAndEdges)
+            {
+                MessageBox.Show("Режим удаления включен. Щелкните ЛКМ на узле или ребре для удаления.");
+            }
+            else
+            {
+                MessageBox.Show("Режим удаления выключен.");
+            }
+        }
+
+        private void info_Click(object sender, EventArgs e)
+        {
+            int nodeCount = nodes.Count;
+            int edgeCount = edges.Count;
+
+            // Выводим общую информацию о графе
+            MessageBox.Show($"Количество вершин: {nodeCount}\nКоличество рёбер: {edgeCount}", "Информация о графе");
+
+            // Выводим степени для всех вершин
+            string degreesInfo = "Степени вершин:\n";
+            for (int i = 0; i < nodeCount; i++)
+            {
+                Node node = nodes[i];
+                int degree = GetNodeDegree(node);
+                degreesInfo += $"{node.Name}: {degree}\n";
+            }
+
+            MessageBox.Show(degreesInfo, "Степени вершин");
+
+            // Выводим степени для выбранной вершины (если выбрана)
+            if (selectedNode1 != null)
+            {
+
+                int selectedNodeDegree = GetNodeDegree(selectedNode1);
+                MessageBox.Show($"Степень выбранной вершины ({selectedNode1.Name}): {selectedNodeDegree}", "Степень вершины");
+            }
+        }
+
+        private int GetNodeDegree(Node node)
+        {
+            // Считаем степень вершины (количество инцидентных рёбер)
+            return edges.Count(edge => edge.Node1 == node || edge.Node2 == node);
+        }
+
+        private void change_edge_type_Click(object sender, EventArgs e)
+        {
+            currentEditMode = (currentEditMode == EditMode.ChangeEdgeType) ? EditMode.None : EditMode.ChangeEdgeType;
+
+            if (currentEditMode == EditMode.ChangeEdgeType)
+            {
+                // Включаем режим изменения типа ребра
+                MessageBox.Show("Режим изменения типа ребра включен. Щелкните ЛКМ на ребре для изменения типа.");
+            }
+            else
+            {
+                // Выключаем режим изменения типа ребра
+                MessageBox.Show("Режим изменения типа ребра выключен.");
+                selectedEdge = null; // Сбрасываем выбранное ребро при выключении режима
+            }
+        }
+
+        private void ChangeSelectedEdgeType(EdgeType edgeType)
+        {
+            if (selectedEdge != null)
+            {
+                selectedEdge.Type = edgeType;
+                panel1.Invalidate(); // Перерисовываем панель после изменения типа дуги
+            }
+        }
+
+
+        private string GetEdgeTypeString(EdgeType edgeType)
+        {
+            switch (edgeType)
+            {
+                case EdgeType.Undirected:
+                    return "Ненаправленная";
+                case EdgeType.DirectedFromNode1ToNode2:
+                    return "Направленная из первого узла во второй";
+                case EdgeType.DirectedFromNode2ToNode1:
+                    return "Направленная из второго узла в первый";
+                default:
+                    return "Неизвестный тип";
+            }
+        }
+        private void DrawArrow(Graphics g, Pen pen, Point start, Point end, EdgeType edgeType)
+        {
+            // Рисуем линию
+            g.DrawLine(pen, start, end);
+
+            // Если тип ребра - направленный, рисуем стрелку
+            if (edgeType != EdgeType.Undirected)
+            {
+                float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+                float arrowSize = 15;
+
+                if (edgeType == EdgeType.DirectedFromNode1ToNode2)
+                {
+                    DrawArrowHead(g, pen, end, angle, arrowSize);
+                }
+                else if (edgeType == EdgeType.DirectedFromNode2ToNode1)
+                {
+                    DrawArrowHead(g, pen, start, angle + (float)Math.PI, arrowSize);
+                }
+            }
+        }
+
+        private void DrawArrowHead(Graphics g, Pen pen, Point position, float angle, float size)
+        {
+            float x1 = position.X - size * (float)Math.Cos(angle - Math.PI / 6);
+            float y1 = position.Y - size * (float)Math.Sin(angle - Math.PI / 6);
+            float x2 = position.X - size * (float)Math.Cos(angle + Math.PI / 6);
+            float y2 = position.Y - size * (float)Math.Sin(angle + Math.PI / 6);
+
+            g.FillPolygon(pen.Brush, new PointF[] { new PointF(position.X, position.Y), new PointF(x1, y1), new PointF(x2, y2) });
+        }
+
+
+        private void udirectedEdgeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeSelectedEdgeType(EdgeType.Undirected);
+        }
+
+        private void directedEdgeFromNode2ToNode1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeSelectedEdgeType(EdgeType.DirectedFromNode2ToNode1);
+        }
+
+        private void directedEdgeFromNode1ToNode2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeSelectedEdgeType(EdgeType.DirectedFromNode1ToNode2);
+        }
+
+        
+
+        private void SaveGraphToFile(string filePath)
+        {
+            GraphData graphData = new GraphData
+            {
+                Nodes = nodes,
+                Edges = edges
+            };
+
+            using (FileStream fs = new FileStream(filePath, FileMode.Create))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fs, graphData);
+            }
+        }
+
+        private void LoadGraphFromFile(string filePath)
+        {
+            using (FileStream fs = new FileStream(filePath, FileMode.Open))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                GraphData graphData = (GraphData)formatter.Deserialize(fs);
+
+                nodes = graphData.Nodes;
+                edges = graphData.Edges;
+
+                panel1.Invalidate();
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Graph File|*.graph";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                LoadGraphFromFile(openFileDialog.FileName);
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Graph File|*.graph";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                SaveGraphToFile(saveFileDialog.FileName);
+            }
+        }
+
+
+        private void matrix_c_Click(object sender, EventArgs e)
+        {
+            int nodeCount = nodes.Count;
+            int[,] adjacencyMatrix = new int[nodeCount, nodeCount];
+
+            // Заполняем матрицу смежности
+            foreach (Edge edge in edges)
+            {
+                int index1 = nodes.IndexOf(edge.Node1);
+                int index2 = nodes.IndexOf(edge.Node2);
+                adjacencyMatrix[index1, index2] = 1;
+                adjacencyMatrix[index2, index1] = 1; // для ненаправленного графа
+            }
+
+            // Выводим матрицу смежности
+            string matrixString = "Матрица смежности:\n";
+            for (int i = 0; i < nodeCount; i++)
+            {
+                for (int j = 0; j < nodeCount; j++)
+                {
+                    matrixString += $"{adjacencyMatrix[i, j]} ";
+                }
+                matrixString += "\n";
+            }
+
+            MessageBox.Show(matrixString, "Информация о графе");
+        }
+
+
+
+        private bool HasSubgraphK5()
+        {
+            // Проверяем наличие подграфа K5
+            int nodeCount = nodes.Count;
+            int[,] adjacencyMatrix = BuildAdjacencyMatrix();
+
+            for (int i = 0; i < nodeCount; i++)
+            {
+                for (int j = i + 1; j < nodeCount; j++)
+                {
+                    if (adjacencyMatrix[i, j] == 0) continue; // Пропускаем несмежные вершины
+
+                    for (int k = j + 1; k < nodeCount; k++)
+                    {
+                        if (adjacencyMatrix[j, k] == 0 || adjacencyMatrix[i, k] == 0) continue; // Пропускаем несмежные вершины
+
+                        for (int m = k + 1; m < nodeCount; m++)
+                        {
+                            if (adjacencyMatrix[i, m] == 0 || adjacencyMatrix[j, m] == 0 || adjacencyMatrix[k, m] == 0) continue; // Пропускаем несмежные вершины
+
+                            // Найден подграф K5
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false; // Подграф K5 не найден
+        }
+
+        private int[,] BuildAdjacencyMatrix()
+        {
+            int nodeCount = nodes.Count;
+            int[,] adjacencyMatrix = new int[nodeCount, nodeCount];
+
+            foreach (Edge edge in edges)
+            {
+                int i = nodes.IndexOf(edge.Node1);
+                int j = nodes.IndexOf(edge.Node2);
+
+                adjacencyMatrix[i, j] = 1;
+                adjacencyMatrix[j, i] = 1; // Если граф ненаправленный, нужно добавить обратное ребро
+            }
+
+            return adjacencyMatrix;
+        }
+
+        private bool HasSubgraphK33()
+        {
+            // Проверяем наличие подграфа K3,3
+            int nodeCount = nodes.Count;
+            int[,] adjacencyMatrix = BuildAdjacencyMatrix();
+
+            for (int i = 0; i < nodeCount; i++)
+            {
+                for (int j = i + 1; j < nodeCount; j++)
+                {
+                    if (adjacencyMatrix[i, j] == 0) continue; // Пропускаем несмежные вершины
+
+                    for (int k = j + 1; k < nodeCount; k++)
+                    {
+                        if (adjacencyMatrix[j, k] == 0) continue; // Пропускаем несмежные вершины
+
+                        for (int m = 0; m < nodeCount; m++)
+                        {
+                            if (m == i || m == j || m == k) continue; // Пропускаем вершины, уже включенные в подграф
+
+                            if (adjacencyMatrix[i, m] == 1 && adjacencyMatrix[j, m] == 1 && adjacencyMatrix[k, m] == 1)
+                            {
+                                // Найден подграф K3,3
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false; // Подграф K3,3 не найден
+        }
+
+        private bool IsGraphPlanar()
+        {
+            int nodeCount = nodes.Count;
+            int edgeCount = edges.Count;
+
+            // По теореме Куратовского, граф планарен, если в нем нет подграфа K5 и K3,3
+            if (nodeCount >= 5 && edgeCount >= 9)
+            {
+                // Проверяем наличие подграфа K5
+                if (HasSubgraphK5())
+                {
+                    return false; // Граф не планарен
+                }
+
+                // Проверяем наличие подграфа K3,3
+                if (HasSubgraphK33())
+                {
+                    return false; // Граф не планарен
+                }
+            }
+
+            return true; // Граф планарен
+        }
+
+        private int GetNodeDegree(Node node, List<Edge> edges)
+        {
+            // Считаем степень вершины (количество инцидентных рёбер)
+            return edges.Count(edge => edge.Node1 == node || edge.Node2 == node);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            bool isPlanar = IsGraphPlanar();
+
+            if (isPlanar)
+            {
+                MessageBox.Show("Граф является планарным.", "Результат");
+            }
+            else
+            {
+                MessageBox.Show("Граф не является планарным.", "Результат");
+            }
+        }
+
+        private void RemoveLastEdge()
+        {
+            if (edges.Count > 0)
+            {
+                edges.RemoveAt(edges.Count - 1);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            bool isPlanar = IsGraphPlanar();
+            while (!isPlanar)
+            {
+                RemoveLastEdge();
+                panel1.Invalidate();
+                if(edges.Count == 0)
+                {
+                    
+                    break;
+                }
+                isPlanar = IsGraphPlanar();
+            }
+
+            if (edges.Count == 0)
+            {
+                MessageBox.Show("Граф не приведён к планарнаму.", "Результат");
+                
+            }
+            else
+            {
+                MessageBox.Show("Граф приведён к планарнаму.", "Результат");
+
+            }
+        }
+
+        private List<List<Node>> FindEulerCycles()
+        {
+            List<List<Node>> eulerCycles = new List<List<Node>>();
+            List<Node> unusedNodes = new List<Node>(nodes);
+            HashSet<Edge> visitedEdges = new HashSet<Edge>();
+
+            while (unusedNodes.Count > 0)
+            {
+                List<Node> eulerCycle = new List<Node>();
+                Node startNode = unusedNodes[0];
+                FindEulerCycle(startNode, eulerCycle, visitedEdges);
+                eulerCycles.Add(eulerCycle);
+
+                // Удалите использованные узлы из списка неиспользованных узлов
+                foreach (var node in eulerCycle)
+                {
+                    unusedNodes.Remove(node);
+                }
+            }
+
+            return eulerCycles;
+        }
+
+        private void FindEulerCycle(Node startNode, List<Node> eulerCycle, HashSet<Edge> visitedEdges)
+        {
+            foreach (Edge edge in edges)
+            {
+                if (edge.Node1 == startNode && !visitedEdges.Contains(edge))
+                {
+                    visitedEdges.Add(edge);
+                    FindEulerCycle(edge.Node2, eulerCycle, visitedEdges);
+                }
+                else if (edge.Node2 == startNode && !visitedEdges.Contains(edge))
+                {
+                    visitedEdges.Add(edge);
+                    FindEulerCycle(edge.Node1, eulerCycle, visitedEdges);
+                }
+            }
+
+            eulerCycle.Add(startNode);
+        }
+        //dsdadsadasd
+        private bool IsGraphEulerian()
+        {
+            // Проверка, что граф связный и степень каждой вершины четная
+            foreach (Node node in nodes)
+            {
+                if (GetNodeDegree(node) % 2 != 0)
+                {
+                    return false;
+                }
+            }
+
+            return IsGraphConnected();
+        }
+
+        private bool IsGraphConnected()
+        {
+            // Простой тест связности: проверка, что из одной вершины можно дойти до всех остальных
+            HashSet<Node> visitedNodes = new HashSet<Node>();
+            Queue<Node> queue = new Queue<Node>();
+
+            queue.Enqueue(nodes[0]);
+            visitedNodes.Add(nodes[0]);
+
+            while (queue.Count > 0)
+            {
+                Node currentNode = queue.Dequeue();
+
+                foreach (Edge edge in edges)
+                {
+                    if (edge.Node1 == currentNode && !visitedNodes.Contains(edge.Node2))
+                    {
+                        queue.Enqueue(edge.Node2);
+                        visitedNodes.Add(edge.Node2);
+                    }
+                    else if (edge.Node2 == currentNode && !visitedNodes.Contains(edge.Node1))
+                    {
+                        queue.Enqueue(edge.Node1);
+                        visitedNodes.Add(edge.Node1);
+                    }
+                }
+            }
+
+            return visitedNodes.Count == nodes.Count;
+        }
+
+        private void eiler_Click(object sender, EventArgs e)
+        {
+            List<List<Node>> eulerCycles = FindEulerCycles();
+
+            if (eulerCycles.Count > 0)
+            {
+                for (int i = 0; i < eulerCycles.Count; i++)
+                {
+                    string cycleString = string.Join(" -> ", eulerCycles[i].Select(node => node.Name));
+                    MessageBox.Show($"Euler Cycle {i + 1}: {cycleString}", $"Euler Cycle {i + 1}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Граф не содержит эйлеров циклов.", "No Euler Cycles");
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            currentEditMode = (currentEditMode == EditMode.ShortAndTraces) ? EditMode.None : EditMode.ShortAndTraces;
+
+            if (currentEditMode == EditMode.ShortAndTraces)
+            {
+                
+                MessageBox.Show("Режим изменения ShortAndTraces включен.");
+            }
+            else
+            {
+                
+                MessageBox.Show("Режим ShortAndTraces выключен.");
+                
+            }
+        }
+
+        private void SmthToShow()
+        {
+            MessageBox.Show("AllDone");
+
+            List<Tuple<List<Node>, int>> allPathsWithDistances = AllPathsWithDistances(chosenNode1, chosenNode2);
+
+            if (allPathsWithDistances.Count > 0)
+            {
+                // Вывод всех путей
+                foreach (var tuple in allPathsWithDistances)
+                {
+                    List<Node> path = tuple.Item1;
+                    int distance = tuple.Item2;
+
+                    string pathString = string.Join(" -> ", path.Select(node => node.Name));
+                    MessageBox.Show($"Path: {pathString}\nDistance: {distance}", "Path Found");
+                }
+
+                // Нахождение всех кратчайших путей
+                var shortestPaths = allPathsWithDistances
+                    .Where(tuple => tuple.Item2 == allPathsWithDistances.Min(t => t.Item2));
+
+                foreach (var shortestPath in shortestPaths)
+                {
+                    List<Node> path = shortestPath.Item1;
+                    int distance = shortestPath.Item2;
+
+                    string shortestPathString = string.Join(" -> ", path.Select(node => node.Name));
+                    MessageBox.Show($"Shortest Path: {shortestPathString}\nShortest Distance: {distance}", "Shortest Paths Found");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No paths found.", "No Paths");
+            }
+        }
+
+        private List<Tuple<List<Node>, int>> AllPathsWithDistances(Node start, Node end)
+        {
+            List<Tuple<List<Node>, int>> paths = new List<Tuple<List<Node>, int>>();
+            List<Node> currentPath = new List<Node>();
+            HashSet<Node> visitedNodes = new HashSet<Node>();
+
+            FindAllPathsWithDistances(start, end, currentPath, paths, visitedNodes);
+
+            return paths;
+        }
+
+        private void FindAllPathsWithDistances(Node current, Node end, List<Node> currentPath, List<Tuple<List<Node>, int>> paths, HashSet<Node> visitedNodes)
+        {
+            currentPath.Add(current);
+            visitedNodes.Add(current);
+
+            if (current == end)
+            {
+                // Вычисляем расстояние как сумму номеров рёбер на пути
+                int distance = CalculatePathDistance(currentPath);
+                paths.Add(new Tuple<List<Node>, int>(new List<Node>(currentPath), distance));
+            }
+            else
+            {
+                foreach (Edge edge in edges)
+                {
+                    if (edge.Node1 == current && !visitedNodes.Contains(edge.Node2))
+                    {
+                        FindAllPathsWithDistances(edge.Node2, end, currentPath, paths, visitedNodes);
+                    }
+                    else if (edge.Node2 == current && !visitedNodes.Contains(edge.Node1))
+                    {
+                        FindAllPathsWithDistances(edge.Node1, end, currentPath, paths, visitedNodes);
+                    }
+                }
+            }
+
+            currentPath.Remove(current);
+            visitedNodes.Remove(current);
+        }
+
+        private int CalculatePathDistance(List<Node> path)
+        {
+            int distance = 0;
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                Node currentNode = path[i];
+                Node nextNode = path[i + 1];
+                Edge edge = edges.FirstOrDefault(e => (e.Node1 == currentNode && e.Node2 == nextNode) || (e.Node1 == nextNode && e.Node2 == currentNode));
+                if (edge != null)
+                {
+                    distance += edge.Number;
+                }
+            }
+            return distance;
+        }
+
+    }
+
+    [Serializable]
+    public class GraphData
+    {
+        public List<Node> Nodes { get; set; }
+        public List<Edge> Edges { get; set; }
+    }
+    public class Graph
+    {
+        public List<Node> Nodes { get; set; }
+        public List<Edge> Edges { get; set; }
+
+        public Graph()
+        {
+            Nodes = new List<Node>();
+            Edges = new List<Edge>();
+        }
+    }
+
+    [Serializable]
+    public class Node
+    {
+        public Point Location { get; set; }
+        public string Name { get; set; }
+
+        public Node(Point location, string name)
+        {
+            Location = location;
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
+    [Serializable]
+    public class Edge
+    {
+        public Node Node1 { get; }
+        public Node Node2 { get; }
+        public int Number { get; set; }
+
+        public EdgeType Type { get; set; } // Добавлено свойство Type
+
+        public Edge(Node node1, Node node2, int number)
+        {
+            Node1 = node1;
+            Node2 = node2;
+            Number = number;
+        }
+
+
+        public override string ToString()
+        {
+            return Number.ToString();
+        }
+    }
+}

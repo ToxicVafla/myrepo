@@ -59,7 +59,7 @@ section_subject_domain_of_stationery
         concept_pencil (* => nrel_main_idtf: [Карандаш] (* <- lang_ru;;*);;*);
         concept_marker (* => nrel_main_idtf: [Маркер] (* <- lang_ru;;*);;*);
         concept_brush (* => nrel_main_idtf: [Кисть] (* <- lang_ru;;*);;*);
-        concept_peper (* => nrel_main_idtf: [Бумага] (* <- lang_ru;;*);;*);
+        concept_paper (* => nrel_main_idtf: [Бумага] (* <- lang_ru;;*);;*);
         concept_notebook (* => nrel_main_idtf: [Блокнот] (* <- lang_ru;;*);;*);            
         concept_paper_clip (* => nrel_main_idtf: [Скрепки] (* <- lang_ru;;*);;*);
         concept_clip (* => nrel_main_idtf: [Зажим] (* <- lang_ru;;*);;*);
